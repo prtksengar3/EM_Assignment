@@ -42,6 +42,7 @@ class ListUsersComponent extends Component {
                             <th>Gender</th>
                             <th>State</th>
                             <th>Skills</th>
+                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody>

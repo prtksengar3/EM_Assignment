@@ -31,7 +31,12 @@ class CreateUserComponent extends Component {
         e.preventDefault();
         var skillsas = Object.keys(this.state.skills).filter((x)=>this.state.skills[x]);
 
-        let user = {name: this.state.name, emailId: this.state.emailId,mobilenum:this.state.mobilenum,gender:this.state.gender,skills:skillsas.toString()};
+        let user = {name: this.state.name, 
+                    emailId: this.state.emailId,
+                    mobilenum:this.state.mobilenum,
+                    gender:this.state.gender,
+                    state:this.state.state,
+                    skills:skillsas.toString()};
         console.log('user => ' + JSON.stringify(user));
 
         UserService.createUser(user).then(res =>{
@@ -67,6 +72,7 @@ class CreateUserComponent extends Component {
     }
 
     changeGenderHandler = (event) =>{
+        console.log(event.target.value);
         this.setState({gender:event.target.value})
     }
 
@@ -114,11 +120,13 @@ class CreateUserComponent extends Component {
                                             <label> Gender &nbsp; &nbsp; 
                                             <label>Male&nbsp; &nbsp;
                                             <input type="radio" className="form-control" name="gender"
-                                                value="Male" onChange={this.changeGenderHandler}/>
+                                                value="Male" checked={this.state.gender==="Male"} 
+                                                onChange={this.changeGenderHandler}/>
                                                 </label>
                                                 <label>Female
                                             <input type="radio" className="form-control" name="gender"
-                                                value="Female" onChange={this.changeGenderHandler}/>
+                                                value="Female" checked={this.state.gender==="Female"}
+                                                onChange={this.changeGenderHandler}/>
                                                 </label>
                                                 </label>
                                         </div>

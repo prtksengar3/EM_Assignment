@@ -40,6 +40,9 @@ public class UserController {
                 .orElseThrow(()-> new ResourceNotFoundException("User not exist with id : "+id));
         user.setName(userDetails.getName());
         user.setEmailId(userDetails.getEmailId());
+        user.setMobilenum(userDetails.getMobilenum());
+        user.setGender(userDetails.getGender());
+        user.setState(userDetails.getState());
         User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(user);
     }

@@ -22,15 +22,20 @@ class UpdateUserComponent extends Component {
         this.changeEmailHandler = this.changeEmailHandler.bind(this);
         this.changeMobileHandler = this.changeMobileHandler.bind(this);
         this.changeStateHandler = this.changeStateHandler.bind(this);
-        // this.changeSkillsHandler = this.changeSkillsHandler.bind(this);
+        this.changeSkillsHandler = this.changeSkillsHandler.bind(this);
         this.changeGenderHandler = this.changeGenderHandler.bind(this);
         this.updateUser = this.updateUser.bind(this);
     }
 
     updateUser = (e) => {
         e.preventDefault();
-        let user = {name: this.state.name, emailId: this.state.emailId};
-        console.log('user => ' + JSON.stringify(user));
+        var skillsas = Object.keys(this.state.skills).filter((x)=>this.state.skills[x]);
+        let user = {name: this.state.name, 
+            emailId: this.state.emailId,
+            mobilenum:this.state.mobilenum,
+            gender:this.state.gender,
+            state:this.state.state,
+            skills:skillsas.toString()};        console.log('user => ' + JSON.stringify(user));
         UserService.updateUser(user,this.state.id).then((res)=>{
             this.props.history.push('/users');
         })
@@ -40,6 +45,9 @@ class UpdateUserComponent extends Component {
     componentDidMount(){
         UserService.getUserById(this.state.id).then((res)=>{
             let user = res.data;
+            console.log(user);
+            // var arrayStr=user.skills.split(",");
+
             this.setState({name:user.name,
                 emailId:user.emailId,
                 mobilenum:user.mobilenum,
@@ -71,12 +79,12 @@ class UpdateUserComponent extends Component {
         this.setState({state:event.target.value})
     }
 
-    // changeSkillsHandler = (event) =>{
-    //     console.log(event.target.value);
-    //     let state = this.state;
-    //     state.skills[event.target.value] = event.target.checked;
-    //     this.setState(state)
-    // }
+    changeSkillsHandler = (event) =>{
+        console.log(event.target.value);
+        let state = this.state;
+        state.skills[event.target.value] = event.target.checked;
+        this.setState(state)
+    }
 
     changeGenderHandler = (event) =>{
         this.setState({gender:event.target.value})
@@ -128,16 +136,18 @@ class UpdateUserComponent extends Component {
                                             <label> Gender &nbsp; &nbsp; 
                                             <label>Male&nbsp; &nbsp;
                                             <input type="radio" className="form-control" name="gender"
-                                                value="Male" onChange={this.changeGenderHandler}/>
+                                                value="Male" checked={this.state.gender==="Male"} 
+                                                onChange={this.changeGenderHandler}/>
                                                 </label>
                                                 <label>Female
                                             <input type="radio" className="form-control" name="gender"
-                                                value="Female" onChange={this.changeGenderHandler}/>
+                                                value="Female" checked={this.state.gender==="Female"}
+                                                onChange={this.changeGenderHandler}/>
                                                 </label>
                                                 </label>
                                         </div>
 
-                                        {/* <div className = "form-group">
+                                        <div className = "form-group">
                                             <label> Skills </label>
                                                 <br/>
                                                 <label>Java&nbsp;&nbsp;
@@ -162,7 +172,7 @@ class UpdateUserComponent extends Component {
                                                 
                                                 
                                         </div>
-                                 */}
+                                
                                         {/* <div className = "form-group">
                                             <label> Profile Image </label>
                                             <input type="File" className="form-control" 
