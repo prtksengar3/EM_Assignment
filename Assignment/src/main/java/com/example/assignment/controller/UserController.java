@@ -43,7 +43,8 @@ public class UserController {
         user.setMobilenum(userDetails.getMobilenum());
         user.setGender(userDetails.getGender());
         user.setState(userDetails.getState());
-        User updatedUser = userRepository.save(user);
+        user.setSkills(userDetails.getSkills());
+        userRepository.save(user);
         return ResponseEntity.ok(user);
     }
 }

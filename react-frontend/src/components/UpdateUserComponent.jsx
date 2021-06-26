@@ -35,8 +35,9 @@ class UpdateUserComponent extends Component {
             mobilenum:this.state.mobilenum,
             gender:this.state.gender,
             state:this.state.state,
-            skills:skillsas.toString()};        console.log('user => ' + JSON.stringify(user));
-        UserService.updateUser(user,this.state.id).then((res)=>{
+            skills:skillsas.toString()};        
+            console.log('user => ' + JSON.stringify(user));
+            UserService.updateUser(user,this.state.id).then((res)=>{
             this.props.history.push('/users');
         })
          
@@ -45,15 +46,21 @@ class UpdateUserComponent extends Component {
     componentDidMount(){
         UserService.getUserById(this.state.id).then((res)=>{
             let user = res.data;
-            console.log(user);
-            // var arrayStr=user.skills.split(",");
-
+            var arrayStr=user.skills.split(",");
+            console.log(arrayStr);
+            
             this.setState({name:user.name,
                 emailId:user.emailId,
                 mobilenum:user.mobilenum,
                 state:user.state,
                 gender:user.gender,
-                skills:user.skills
+                skills:{
+                    Java:arrayStr.indexOf("Java")>-1?true:false,
+                    SpringBoot:arrayStr.indexOf("SpringBoot")>-1?true:false,
+                    JavaScript:arrayStr.indexOf("JavaScript")>-1?true:false,
+                    MySQL:arrayStr.indexOf("MySQL")>-1?true:false
+                }
+
 
             })
         })
