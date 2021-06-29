@@ -18,6 +18,7 @@ class UserService{
     updateUser(user,userId){
         return axios.put(base_url+"/"+userId,user);
     }
+
 }
 
 export default new UserService()

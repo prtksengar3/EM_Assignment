@@ -8,9 +8,10 @@ class CreateUserComponent extends Component {
 
         this.state = {
             name: '',
-            emailId: '',
+            emailId: '',    
             mobilenum:'',
             state:'',
+            photos:'',
             skills:{
                 Java:false,
                 SpringBoot:false,
@@ -24,22 +25,27 @@ class CreateUserComponent extends Component {
         this.changeStateHandler = this.changeStateHandler.bind(this);
         this.changeSkillsHandler = this.changeSkillsHandler.bind(this);
         this.changeGenderHandler = this.changeGenderHandler.bind(this);
+        this.changeImageHandler = this.changeImageHandler.bind(this);
         this.saveUser = this.saveUser.bind(this);
     }
 
     saveUser = (e) => {
         e.preventDefault();
         var skillsas = Object.keys(this.state.skills).filter((x)=>this.state.skills[x]);
+        const data = new FormData() 
+        data.append('image', this.state.photos)
 
         let user = {name: this.state.name, 
                     emailId: this.state.emailId,
                     mobilenum:this.state.mobilenum,
                     gender:this.state.gender,
                     state:this.state.state,
-                    skills:skillsas.toString()};
+                    skills:skillsas.toString(),
+                    // photos:data,
+                    // image:data
+                }
         console.log('user => ' + JSON.stringify(user));
-
-        UserService.createUser(user).then(res =>{
+        UserService.createUser(user,data).then(res =>{
             this.props.history.push('/users')
         });
     }
@@ -76,6 +82,12 @@ class CreateUserComponent extends Component {
         this.setState({gender:event.target.value})
     }
 
+    changeImageHandler = (event) =>{
+        console.log(event.target.files[0]);
+        let file = event.target.files[0]
+        this.setState({photos:file})
+    }
+
     render() {
         return (
             <div>
@@ -85,7 +97,7 @@ class CreateUserComponent extends Component {
                             <div className = "card col-md-6 offset-md-3 offset-md-3">
                                 <h3 className="text-center">Add User</h3>
                                 <div className = "card-body">
-                                    <form>
+                                    <form encType="multipart/form-data">
                                         <div className = "form-group">
                                             <label> Full Name: </label>
                                             <input placeholder="First Name" required name="name" className="form-control" 
@@ -107,7 +119,7 @@ class CreateUserComponent extends Component {
                                         <div className = "form-group">
                                             <label> State&nbsp; &nbsp;</label>
                                                 <select  name = "state" value ={this.state.state} onChange = {this.changeStateHandler}>
-                                                {/* <option disabled selected>State</option> */}
+                                                <option hidden defaultValue>State</option>
                                                 <option value="Uttar Pradesh">Uttar Pradesh</option>
                                                 <option value="Harayana">Haryana</option>
                                                 <option value="Rajasthan">Rajasthan</option>
@@ -159,9 +171,14 @@ class CreateUserComponent extends Component {
                                 
                                         {/* <div className = "form-group">
                                             <label> Profile Image </label>
-                                            <input type="File" className="form-control" 
-                                                value={this.state.emailId} onChange={this.changeEmailHandler}/>
+                                            <input type="File" className="form-control" name="file"
+                                                onChange={this.changeImageHandler}/>
                                         </div> */}
+                                        <div>
+                                            <label>Photos: </label>
+                                            <input type="file" name="image" accept="image/png, image/jpeg" onChange={this.changeImageHandler}/>
+                                        </div>
+
 
                                         <button className="btn btn-success" onClick={this.saveUser}>Save</button>
                                         <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>Cancel</button>

@@ -1,50 +1,47 @@
 package com.example.assignment.controller;
 
 import com.example.assignment.exception.ResourceNotFoundException;
+import com.example.assignment.helper.FileUploadHelper;
 import com.example.assignment.model.User;
-import com.example.assignment.repository.UserRepository;
+import com.example.assignment.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000/")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
     @GetMapping("/users")
     public List<User> getAllUsers(){
 
-        return userRepository.findAll();
+        return userService.getAllUsers();
     }
 
     @PostMapping("/users")
-    public User createUser(@RequestBody User user)
+    public User createUser(@Valid @RequestBody User user)
     {
-        return userRepository.save(user);
+//        @RequestParam("image") MultipartFile multipartFile
+        return userService.createUser(user);
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id){
-        User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("User not exist with id : "+id));
+        User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails){
-        User user = userRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("User not exist with id : "+id));
-        user.setName(userDetails.getName());
-        user.setEmailId(userDetails.getEmailId());
-        user.setMobilenum(userDetails.getMobilenum());
-        user.setGender(userDetails.getGender());
-        user.setState(userDetails.getState());
-        user.setSkills(userDetails.getSkills());
-        userRepository.save(user);
+    public ResponseEntity<User> updateUser(@PathVariable Long id,@Valid @RequestBody User userDetails){
+        User user = userService.updateUser(id,userDetails);
         return ResponseEntity.ok(user);
     }
 }

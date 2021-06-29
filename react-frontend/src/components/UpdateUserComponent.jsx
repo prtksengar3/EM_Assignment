@@ -130,7 +130,7 @@ class UpdateUserComponent extends Component {
                                         <div className = "form-group">
                                             <label> State&nbsp; &nbsp;</label>
                                                 <select  name = "state" value ={this.state.state} onChange = {this.changeStateHandler}>
-                                                {/* <option disabled selected>State</option> */}
+                                                <option hidden defaultValue>State</option>
                                                 <option value="Uttar Pradesh">Uttar Pradesh</option>
                                                 <option value="Harayana">Haryana</option>
                                                 <option value="Rajasthan">Rajasthan</option>
@@ -176,8 +176,7 @@ class UpdateUserComponent extends Component {
                                             <input type="checkbox" name="skills" value="MySQL" className="form-control" checked={this.state.skills.MySQL}
                                                  onChange={this.changeSkillsHandler}/>
                                                  </label>
-                                                
-                                                
+                                                     
                                         </div>
                                 
                                         {/* <div className = "form-group">
