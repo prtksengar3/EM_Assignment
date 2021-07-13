@@ -5,14 +5,17 @@ class ListUsersComponent extends Component {
     constructor(props){
         super(props)
         this.state = {
-            users:[]
+            users:[],
+            currentPage:1,
+            usersPerPage:5
         }
         this.addUser = this.addUser.bind(this);
         this.editUser = this.editUser.bind(this);
     }
 
     componentDidMount(){
-        UserService.getUsers().then((res)=>{
+        UserService.getUsers(this.currentPage,this.usersPerPage,"id").then((res)=>{
+            console.log(res.data);
             this.setState({users:res.data})
         });
     }
@@ -25,7 +28,21 @@ class ListUsersComponent extends Component {
     editUser(id){
         this.props.history.push(`/update-user/${id}`)
     }
+
+    changePageHandler= (event) => {
+        this.setState({currentPage: event.target.value});
+        
+        UserService.getUsers(this.currentPage,this.usersPerPage,"id").then((res)=>{
+            this.setState({users:res.data})
+        });
+    }
+
     render() {
+        const {users,currentPage,usersPerPage} = this.state;
+        const lastIndex = currentPage * usersPerPage;
+        const firstIndex = lastIndex - usersPerPage;
+        const currentUsers = users.slice(firstIndex,lastIndex);
+        const totalPages = users.length / usersPerPage;
         return (
             <div>
                 <h2 className="text-center">Users List</h2>
@@ -47,7 +64,7 @@ class ListUsersComponent extends Component {
                     </thead>
                     <tbody>
                         {
-                            this.state.users.map(
+                            users.map(
                                 user=>
                                 <tr key = {user.id}>
                                     <td>{user.name}</td>
@@ -64,6 +81,14 @@ class ListUsersComponent extends Component {
                         }
                     </tbody>
                     </table>
+                    <nav className="d-flex justify-content-center">
+                        <ul className="pagination">
+                            <li className="page-link">1</li>
+                            <li className="page-link" value={2} onClick={this.changePageHandler}>2</li>
+                            <li className="page-link">3</li>
+
+                        </ul>
+                    </nav>
                 </div>
             </div>
         );

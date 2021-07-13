@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-const base_url = "http://localhost:8090/api/v1/users";
+const base_url = "http://localhost:8081/api/v1/users";
+const base_url1 = "http://localhost:8081/api/v1/pagedusers";
+
 
 class UserService{
-    getUsers(){
-        return axios.get(base_url);
+    getUsers(currentPage ,pageSize,sortBy){
+        return axios.get(base_url,currentPage,pageSize,sortBy);
     }
 
     createUser(user){
@@ -12,6 +14,7 @@ class UserService{
     }
 
     getUserById(userId){
+        console.log(userId)
         return axios.get(base_url+"/"+userId);
     }
 
